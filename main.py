@@ -47,4 +47,6 @@ if st.button('Consultar'):
                 st.text(response.text)  # Muestra el contenido de la respuesta para depuración
         else:
             st.error(f'Error al enviar la consulta: {response.status_code}')
-            st.text(response.text)  # Muestra el contenido de la respuesta para depuración
+            st.text('Ingresa el artículo que deseas procesar')
+            #st.text(response.text)  # Muestra el contenido de la respuesta para depuración
+            
