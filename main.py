@@ -46,7 +46,7 @@ if st.button('Consultar'):
                 st.error('Error al procesar la respuesta JSON')
                 st.text(response.text)  # Muestra el contenido de la respuesta para depuración
         else:
-            st.error(f'Error al enviar la consulta: {response.status_code}')
-            st.text('Ingresa el artículo que deseas procesar')
+            #st.error(f'Error al enviar la consulta: {response.status_code}')
+            st.error('Ingresa el artículo que deseas procesar')
             #st.text(response.text)  # Muestra el contenido de la respuesta para depuración
             
