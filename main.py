@@ -62,5 +62,5 @@ if st.button('Consultar'):
                 st.error('Error al procesar la respuesta JSON')
                 st.text(response.text)  # Muestra el contenido de la respuesta para depuración
         else:
-            st.error('Error al enviar la solicitud a la API.')
-            st.text(response.text)  # Muestra el contenido de la respuesta para depuración
+            st.error('El contenido supera la cantidad máxima de caracteres')
+            #st.text(response.text)  # Muestra el contenido de la respuesta para depuración
