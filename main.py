@@ -14,7 +14,7 @@ contenido = st.text_area('Ingresa el artículo que deseas procesar:', on_change=
 # Función para actualizar el contador de caracteres
 def update_char_count():
     char_count = len(contenido)
-    char_count_container.text(f'Caracteres: {char_count}')
+    char_count_container.text(f'Da clic fuera del text area para ver la cantidad de caracteres Caracteres: {char_count}')
 
 # Llamar a la función para mostrar el contador de caracteres inicial
 update_char_count()
