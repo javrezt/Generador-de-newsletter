@@ -5,8 +5,19 @@ import os
 # Encabezado de la aplicación
 st.header('Desplegando asistente para extraer insights artículos')
 
+# Contenedor para el contador de caracteres
+char_count_container = st.empty()
+
 # Campo para recibir una consulta
-contenido = st.text_area('Ingresa el artículo que deseas procesar:')
+contenido = st.text_area('Ingresa el artículo que deseas procesar:', on_change=lambda: update_char_count())
+
+# Función para actualizar el contador de caracteres
+def update_char_count():
+    char_count = len(contenido)
+    char_count_container.text(f'Caracteres: {char_count}')
+
+# Llamar a la función para mostrar el contador de caracteres inicial
+update_char_count()
 
 # Guardar los valores en variables
 if st.button('Consultar'):
@@ -37,16 +48,12 @@ if st.button('Consultar'):
 
         # Verificar y manejar la respuesta
         if response.status_code == 200:
-            #st.success('Consulta enviada con éxito!')
             try:
                 result = response.json()
-                #st.markdown('### Resultado de la solicitud:')
                 st.markdown(result['answer'])
             except ValueError as e:
                 st.error('Error al procesar la respuesta JSON')
                 st.text(response.text)  # Muestra el contenido de la respuesta para depuración
         else:
-            #st.error(f'Error al enviar la consulta: {response.status_code}')
             st.error('Ingresa el artículo que deseas procesar')
-            #st.text(response.text)  # Muestra el contenido de la respuesta para depuración
-            
+            st.text(response.text)  # Muestra el contenido de la respuesta para depuración
