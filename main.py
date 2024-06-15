@@ -8,13 +8,17 @@ st.header('Desplegando asistente para extraer insights artículos')
 # Contenedor para el contador de caracteres
 char_count_container = st.empty()
 
-# Campo para recibir una consulta
-contenido = st.text_area('Ingresa el artículo que deseas procesar:', on_change=lambda: update_char_count())
-
 # Función para actualizar el contador de caracteres
 def update_char_count():
-    char_count = len(contenido)
-    char_count_container.text(f'Da clic fuera del text area para ver la cantidad de caracteres Caracteres: {char_count}')
+    char_count = len(st.session_state.contenido)
+    char_count_container.text(f'Caracteres: {char_count}')
+
+# Inicializar session_state para 'contenido'
+if 'contenido' not in st.session_state:
+    st.session_state['contenido'] = ""
+
+# Campo para recibir una consulta
+contenido = st.text_area('Ingresa el artículo que deseas procesar:', key='contenido', on_change=update_char_count)
 
 # Llamar a la función para mostrar el contador de caracteres inicial
 update_char_count()
@@ -37,7 +41,7 @@ if st.button('Consultar'):
         # Datos a enviar en la petición
         data = {
             "inputs": {
-                "contenido": contenido
+                "contenido": st.session_state['contenido']
             },
             "response_mode": "blocking",
             "user": "javrezt"
@@ -50,10 +54,13 @@ if st.button('Consultar'):
         if response.status_code == 200:
             try:
                 result = response.json()
-                st.markdown(result['answer'])
+                if 'code' in result and result['code'] == 'completion_request_error':
+                    st.error('El número de tokens ha superado el límite permitido.')
+                else:
+                    st.markdown(result['answer'])
             except ValueError as e:
                 st.error('Error al procesar la respuesta JSON')
                 st.text(response.text)  # Muestra el contenido de la respuesta para depuración
         else:
-            st.error('Ingresa el artículo que deseas procesar')
+            st.error('Error al enviar la solicitud a la API.')
             st.text(response.text)  # Muestra el contenido de la respuesta para depuración
