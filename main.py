@@ -3,19 +3,28 @@ import requests
 import os
 
 # Encabezado de la aplicación
-st.header('Desplegando asistente para extraer insights artículos')
+st.header('Asistente para generar artículos')
 
-# Contenedor para el contador de caracteres
+# Contenedor para el contador de caracteres y el mensaje de error
 char_count_container = st.empty()
+error_message_container = st.empty()
+
+# Inicializar session_state para 'contenido' y 'button_disabled'
+if 'contenido' not in st.session_state:
+    st.session_state['contenido'] = ""
+if 'button_disabled' not in st.session_state:
+    st.session_state['button_disabled'] = False
 
 # Función para actualizar el contador de caracteres
 def update_char_count():
     char_count = len(st.session_state.contenido)
     char_count_container.text(f'Caracteres: {char_count}')
-
-# Inicializar session_state para 'contenido'
-if 'contenido' not in st.session_state:
-    st.session_state['contenido'] = ""
+    if char_count > 10000:
+        st.session_state['button_disabled'] = True
+        error_message_container.error('El contenido debe tener un máximo de 10,000 caracteres.')
+    else:
+        st.session_state['button_disabled'] = False
+        error_message_container.empty()
 
 # Campo para recibir una consulta
 contenido = st.text_area('Ingresa el artículo que deseas procesar:', key='contenido', on_change=update_char_count)
@@ -24,7 +33,7 @@ contenido = st.text_area('Ingresa el artículo que deseas procesar:', key='conte
 update_char_count()
 
 # Guardar los valores en variables
-if st.button('Consultar'):
+if st.button('Consultar', disabled=st.session_state['button_disabled']):
     base_url = "https://api.dify.ai/v1/completion-messages"
     # Debes reemplazar esto con tu API key real
     my_secret = os.getenv('DIFY_APP_SECRET')
