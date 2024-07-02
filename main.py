@@ -27,7 +27,7 @@ def update_char_count():
         error_message_container.empty()
 
 # Campo para recibir una consulta
-contenido = st.text_area('Ingresa el artículo que deseas procesar:', key='contenido', on_change=update_char_count)
+contenido = st.text_area('Ingresa el texto de la noticia que deseas procesar:', key='contenido', on_change=update_char_count)
 
 # Llamar a la función para mostrar el contador de caracteres inicial
 update_char_count()
